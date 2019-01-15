@@ -1,0 +1,11 @@
+image:
+  repository: hub.i-soft.com.cn:5080/lxapp/owncloud
+  tag: v2.0.4
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 80
+
+hostpath:
+  path: /data/owncloud

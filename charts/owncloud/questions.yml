@@ -1,0 +1,41 @@
+categories:
+- owncloud
+questions:
+- variable: defaultImage
+  default: "true"
+  label: 是否使用默认镜像？
+  type: boolean
+  show_subquestion_if: false
+  group: "镜像"
+  subquestions:
+  - variable: image.repository
+    default: "hub.i-soft.com.cn:5080/lxapp/owncloud"
+    type: string
+    label: 镜像名：
+  - variable: image.tag
+    default: "v2.0.4"
+    type: string
+    label: 镜像tag：
+- variable: service.type
+  default: "ClusterIP"
+  type: enum
+  options:
+    - "ClusterIP"
+    - "NodePort"
+  required: true
+  label: 服务类型：
+  show_subquestion_if: "NodePort"
+  group: "服务"
+  subquestions:
+  - variable: service.nodePort
+    default: ""
+    description: "端口号请在 30000-32767之间选择"
+    type: int
+    min: 30000
+    max: 32767
+    label: 服务端口号：
+- variable: hostpath.path 
+  default: "/data/owncloud"
+  group: "存储"
+  type: string
+  label: 存在主机上的目录：
