@@ -1,0 +1,17 @@
+# 以hub.i-soft.com.cn:5080/library/loongson:v1.0为基础镜像打包
+FROM hub.i-soft.com.cn:5080/library/loongson:v1.0
+# 在镜像中安装所需的依赖包，安装完成之后清理一下，以免浪费资源
+RUN yum install tar bzip2 httpd mariadb-server php php-gd php-mbstring php-mysqlnd php-pecl-apcu redis php-pecl-redis php-ldap php-cli php-common php-zip php-intl -y
+RUN yum clean all
+# 将应用以及应用所需的配置文件
+COPY httpd.conf /etc/httpd/conf/httpd.conf
+# 由于在docker中挂载机制只能将卷挂载到容器，所以只能先将压缩包复制到容器中，启动时通过脚本判断挂载的路径中是否有解压后的文件，如果没有则将压缩包解压至路径中，脚本可查看run.sh
+COPY owncloud-10.0.10.tar.gz /home
+# 服务需要暴露的端口
+EXPOSE 80
+# 将启动需要执行的脚本复制到容器中
+ADD run.sh /
+# 将容器时间与时区同步
+RUN ln -s /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime -f
+# 容器启动时执行run脚本
+ENTRYPOINT ["bash","run.sh"]
