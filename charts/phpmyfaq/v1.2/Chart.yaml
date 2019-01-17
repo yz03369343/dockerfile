@@ -1,0 +1,10 @@
+appVersion: 2.9.11
+description: "mysql地址:127.0.0.1:3306 用户名：root 密码：空密码"
+name: phpmyfaq
+version: v1.2.0
+kewords:
+- phpmyfaq
+- php
+- http
+home: https://phpmyfaq.org/
+icon: http://hub.i-soft.com.cn:5081/phpmyfaq.png

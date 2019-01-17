@@ -1,0 +1,40 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "phpmyfaq.fullname" . }}
+spec:
+  template:
+    metadata:
+      labels:
+        app: {{ template "phpmyfaq.name" . }}
+        release: "{{ .Release.Name }}"
+    spec:
+      containers:
+        - name: phpmyfaq
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          ports:
+          - containerPort: 80
+          volumeMounts:
+          - name: {{ template "phpmyfaq.fullname" . }}
+            mountPath: /var/www/html
+        - name: mariadb
+          image: "{{ .Values.mariadbimage.repository }}:{{ .Values.mariadbimage.tag }}"
+          imagePullPolicy: {{ .Values.mariadbimage.pullPolicy | quote }}
+          env:
+           - name: MARIADB_DATABASE
+             value: {{ .Values.mariadb.database }}              
+          ports:
+          - containerPort: 3306
+          volumeMounts:
+          - name: {{ template "phpmyfaq.fullname" . }}-db
+            mountPath: /var/lib/mysql
+      volumes:
+       - name: {{ template "phpmyfaq.fullname" . }}
+         hostPath:
+           path: {{ .Values.hostpath.path }} 
+       - name: {{ template "phpmyfaq.fullname" . }}-db
+         hostPath:
+           path: {{ .Values.hostpath.path }}/mariadb
+
+

@@ -1,0 +1,9 @@
+FROM hub.i-soft.com.cn:5080/library/loongson:v1.0
+RUN yum install tar bzip2 httpd mariadb-server php php-gd php-mbstring php-mysqlnd php-pecl-apcu redis php-pecl-redis php-ldap php-cli php-common php-zip php-intl -y
+RUN yum clean all
+COPY httpd.conf /etc/httpd/conf/httpd.conf
+COPY phpmyfaq-2.9.11.tar.gz /home
+EXPOSE 80
+ADD run.sh /
+RUN sed -ri -e 's!^(\s*CustomLog)\s+\S+!\1 /proc/self/fd/1!g' -e 's!^(\s*ErrorLog)\s+\S+!\1 /proc/self/fd/2!g' "/etc/httpd/conf/httpd.conf" && ln -s /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime -f
+ENTRYPOINT ["bash","run.sh"]

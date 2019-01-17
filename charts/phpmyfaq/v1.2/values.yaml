@@ -1,0 +1,19 @@
+image:
+  repository: hub.i-soft.com.cn:5080/lxapp/phpmyfaq
+  tag: v1.2
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 80
+
+hostpath:
+  path: /data/phpmyfaq
+
+mariadbimage:
+  repository: hub.i-soft.com.cn:5080/lxapp/mariadb
+  tag: 10.0.25
+  pullPolicy: IfNotPresent
+
+mariadb:
+  database: phpmyfaq
